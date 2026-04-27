@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Utilizadores do sistema (admins, bibliotecários, etc.)
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  password  String
+  role      Role     @default(BIBLIOTECARIO)
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Leitores (clientes da biblioteca)
+model Leitor {
+  id          Int          @id @default(autoincrement())
+  nome        String
+  email       String       @unique
+  telefone    String?
+  nif         String?      @unique
+  morada      String?
+  ativo       Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  emprestimos Emprestimo[]
+}
+
+model Livro {
+  id           Int          @id @default(autoincrement())
+  titulo       String
+  autor        String
+  isbn         String       @unique
+  ano          Int?
+  editora      String?
+  categoria    String?
+  quantidade   Int          @default(1)  // total de exemplares
+  disponiveis  Int          @default(1)  // exemplares disponíveis para empréstimo
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  emprestimos  Emprestimo[]
+}
+
+model Emprestimo {
+  id              Int               @id @default(autoincrement())
+  leitorId        Int
+  livroId         Int
+  dataEmprestimo  DateTime          @default(now())
+  dataPrevista    DateTime          // data prevista de devolução
+  dataDevolucao   DateTime?         // preenchida quando devolvido
+  estado          EstadoEmprestimo  @default(ATIVO)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  leitor  Leitor @relation(fields: [leitorId], references: [id])
+  livro   Livro  @relation(fields: [livroId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  BIBLIOTECARIO
+}
+
+enum EstadoEmprestimo {
+  ATIVO       // ainda não devolvido
+  DEVOLVIDO   // devolvido a tempo
+  ATRASADO    // passou da data prevista sem devolução
+}
