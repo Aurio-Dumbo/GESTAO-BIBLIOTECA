@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify";
 import {prisma} from "../lib/prisma"
+import { authenticate } from "../middleware/authenticate";
 
 export async function EmprestimosRoutes(app:FastifyInstance){
-    app.get("/emprestimos", async(request, reply) =>{
+    app.get("/emprestimos",{preHandler: authenticate}, async(request, reply) =>{
         const emprestimos = await prisma.emprestimo.findMany({
             include:{
                 leitor: true,
@@ -11,14 +12,14 @@ export async function EmprestimosRoutes(app:FastifyInstance){
         })
         if(!emprestimos) return reply.status(404).send({message: "Nenhum emprestimo encontrado!"})
     })
-app.get("/emprestimos/:id", async(request, reply) =>{
+app.get("/emprestimos/:id",{preHandler: authenticate}, async(request, reply) =>{
     const {id} = request.params as {id: string}
     const emprestimo = await prisma.emprestimo.findUnique({
         where: {id: Number(id)}
     })
     if(!emprestimo) return reply.status(404).send({message: "Emprestimo não encontrado."})
 })
-app.post("/emprestimos", async(request, reply) =>{
+app.post("/emprestimos",{preHandler: authenticate}, async(request, reply) =>{
     const {leitorId, livroId, dataPrevista} = request.body as({
         leitorId: string;
         livroId: string;
@@ -42,7 +43,7 @@ app.post("/emprestimos", async(request, reply) =>{
         })
     ])
 })
-    app.put("/emprestimos/:id", async(request, reply) => {
+    app.put("/emprestimos/:id",{preHandler: authenticate} ,async(request, reply) => {
         const {emprestimoId} = request.body as {emprestimoId: number}
        const emprestimo = await prisma.emprestimo.findUnique({
         where: {id: emprestimoId}
