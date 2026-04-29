@@ -1,14 +1,15 @@
 import { FastifyInstance } from "fastify";
 import {prisma} from "../lib/prisma"
+import { authenticate } from "../middleware/authenticate";
 export async function LeitoresRoutes(app: FastifyInstance) {
-    app.get("/leitores", async(request, reply) =>{
+    app.get("/leitores",{preHandler: authenticate}, async(request, reply) =>{
         const leitores = await prisma.leitor.findMany()
         if(!leitores){
             return reply.code(404).send({message: "Nenhum leitor encontrado."})
         }
         return leitores
     })
-    app.get("/leitores/:id", async(request, reply) => {
+    app.get("/leitores/:id",{preHandler: authenticate}, async(request, reply) => {
         const {id} = request.params as {id: string}
         const leitor = await prisma.leitor.findUnique({
             where: {id: Number(id)}
@@ -18,7 +19,7 @@ export async function LeitoresRoutes(app: FastifyInstance) {
         }
         return leitor
     })
-    app.post("/leitores", async(request, reply) =>{
+    app.post("/leitores",{preHandler: authenticate}, async(request, reply) =>{
         const {nome, email, telefone, nif, morada, ativo} = request.body as {
             nome: string;
             email: string;
@@ -29,7 +30,7 @@ export async function LeitoresRoutes(app: FastifyInstance) {
         }
         return reply.status(201).send({message: "Leitor criado com sucesso"})
     })
-    app.put("/leitores:/id", async(request, reply) =>{
+    app.put("/leitores:/id",{preHandler: authenticate}, async(request, reply) =>{
         const{id} = request.params as {id: string}
         const {nome, email, telefone, nif, morada, ativo} = request.body as {
             nome?: string;
@@ -45,7 +46,7 @@ export async function LeitoresRoutes(app: FastifyInstance) {
         })
         return leitor
     })
-    app.delete("/leitores/:id", async(request, reply) =>{
+    app.delete("/leitores/:id",{preHandler: authenticate}, async(request, reply) =>{
         const {id} = request.params as {id: string}
         await prisma.leitor.delete({
             where: {id: Number(id)}

@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
+import { authenticate } from "../middleware/authenticate";
 
 export async function LivrosRoutes(app: FastifyInstance){
     app.get("/livros", async (request, reply) => {
@@ -26,7 +27,7 @@ export async function LivrosRoutes(app: FastifyInstance){
         return livro
     })
 
-    app.post("/livros", async (request, reply) => {
+    app.post("/livros",{preHandler: authenticate}, async (request, reply) => {
     const { isbn, quantidade } = request.body as {
         isbn: string;
         quantidade?: number;
@@ -41,7 +42,6 @@ export async function LivrosRoutes(app: FastifyInstance){
         return reply.status(404).send({ message: "Livro não encontrado na Open Library." })
     }
 
-   
     const titulo = livroData.title
     const autor = livroData.authors?.[0]?.name ?? "Desconhecido"
     const ano = livroData.publish_date ? Number(livroData.publish_date.slice(-4)) : null
@@ -61,7 +61,7 @@ export async function LivrosRoutes(app: FastifyInstance){
 
     return reply.status(201).send(livro)
 })
-    app.put("/livros/:id", async(request, reply) => {
+    app.put("/livros/:id",{preHandler: authenticate}, async(request, reply) => {
         const {id} = request.params as {id: string}
         const {titulo, autor, isbn, ano, editora, categoria} = request.body as {
             titulo?: string;
@@ -77,7 +77,7 @@ export async function LivrosRoutes(app: FastifyInstance){
         })
         return livro
     })
-    app.delete("/livros:id", async (request, reply) => {
+    app.delete("/livros:id",{preHandler: authenticate}, async (request, reply) => {
         const {id} = request.params as {id: string}
         await prisma.livro.delete({
             where: {id: Number(id)}
