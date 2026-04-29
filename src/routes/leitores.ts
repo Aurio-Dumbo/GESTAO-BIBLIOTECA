@@ -20,17 +20,38 @@ export async function LeitoresRoutes(app: FastifyInstance) {
         return leitor
     })
     app.post("/leitores",{preHandler: authenticate}, async(request, reply) =>{
-        const {nome, email, telefone, nif, morada, ativo} = request.body as {
-            nome: string;
+        const {email, telefone, nif, morada, ativo} = request.body as {
             email: string;
             telefone: string;
             nif?: string;
             morada: string;
             ativo: boolean;
         }
-        return reply.status(201).send({message: "Leitor criado com sucesso"})
+        const response = await fetch(`https://consulta.edgarsingui.ao/consultar/${nif}`)
+        if(!response.ok) return reply.status(404).send({message: "NIF inválido ou não encontrado!"})
+        const data = await response.json() as{
+             error: boolean;
+             name: string;
+            endereco: string;
+            data_de_nascimento: string;
+         }
+       
+         const leitorExistente = await prisma.leitor.findUnique({
+            where : {nif}
+        })
+        if(leitorExistente) return reply.status(400).send({"message": "O leitor já registrado."})
+        const leitor = await prisma.leitor.create({
+            data: {
+                nome: data.name,
+                email,
+                telefone,
+                nif,
+                morada
+            }
     })
-    app.put("/leitores:/id",{preHandler: authenticate}, async(request, reply) =>{
+        return reply.status(201).send(leitor)
+    })
+    app.put("/leitores/:id",{preHandler: authenticate}, async(request, reply) =>{
         const{id} = request.params as {id: string}
         const {nome, email, telefone, nif, morada, ativo} = request.body as {
             nome?: string;
