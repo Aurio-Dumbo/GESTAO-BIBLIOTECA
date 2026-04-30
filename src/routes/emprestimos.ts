@@ -11,6 +11,7 @@ export async function EmprestimosRoutes(app:FastifyInstance){
             }
         })
         if(!emprestimos) return reply.status(404).send({message: "Nenhum emprestimo encontrado!"})
+        return reply.status(200).send(emprestimos)
     })
 app.get("/emprestimos/:id",{preHandler: authenticate}, async(request, reply) =>{
     const {id} = request.params as {id: string}
@@ -18,6 +19,7 @@ app.get("/emprestimos/:id",{preHandler: authenticate}, async(request, reply) =>{
         where: {id: Number(id)}
     })
     if(!emprestimo) return reply.status(404).send({message: "Emprestimo não encontrado."})
+    return reply.status(200).send(emprestimo)
 })
 app.post("/emprestimos",{preHandler: authenticate}, async(request, reply) =>{
     const {leitorId, livroId, dataPrevista} = request.body as({

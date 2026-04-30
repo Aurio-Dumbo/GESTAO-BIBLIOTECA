@@ -84,7 +84,7 @@ async function buscarLivroPorIsbn(isbn: string): Promise<LivroExterno | null> {
             return livro
         }
     } catch {
-        // Segue para o fallback abaixo quando a Open Library estiver indisponivel.
+        //  fallback abaixo quando a Open Library estiver indisponivel.
     }
 
     return buscarNoGoogleBooks(isbn)
