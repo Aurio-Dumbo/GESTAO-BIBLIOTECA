@@ -2,9 +2,20 @@ import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 import { authenticate } from "../middleware/authenticate";
+
+function ensureAdmin(request: any, reply: any) {
+  const userRole = request.user?.role;
+  if (userRole !== "ADMIN") {
+    reply.status(403).send({ message: "Acesso negado. Apenas ADMIN." });
+    return false;
+  }
+  return true;
+}
+
 export async function UsuariosRoutes(app: FastifyInstance) {
 
   app.get("/usuarios",{preHandler: authenticate}, async (request, reply) => {
+    if (!ensureAdmin(request, reply)) return;
     const usuarios = await prisma.usuario.findMany({
       select: {
         id: true,
@@ -20,6 +31,7 @@ export async function UsuariosRoutes(app: FastifyInstance) {
   })
 
   app.get("/usuarios/:id",{preHandler: authenticate}, async (request, reply) => {
+    if (!ensureAdmin(request, reply)) return;
     const { id } = request.params as { id: string }
 
     const usuario = await prisma.usuario.findUnique({
@@ -51,6 +63,8 @@ export async function UsuariosRoutes(app: FastifyInstance) {
       if (reply.sent) {
         return
       }
+
+      if (!ensureAdmin(request, reply)) return;
     }
 
     const { nome, username, pin, role } = request.body as {
@@ -81,6 +95,7 @@ export async function UsuariosRoutes(app: FastifyInstance) {
   })
 
   app.put("/usuarios/:id",{preHandler: authenticate}, async (request, reply) => {
+    if (!ensureAdmin(request, reply)) return;
     const { id } = request.params as { id: string }
     const { nome, username, pin, role, ativo } = request.body as {
       nome?: string;
@@ -114,6 +129,7 @@ export async function UsuariosRoutes(app: FastifyInstance) {
   })
 
   app.delete("/usuarios/:id",{preHandler: authenticate}, async (request, reply) => {
+    if (!ensureAdmin(request, reply)) return;
     const { id } = request.params as { id: string }
 
     await prisma.usuario.delete({
