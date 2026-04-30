@@ -24,7 +24,7 @@ function isBcryptHash(value: string) {
 
 app.register(fastifyCors, {
   origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 });
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET_KEY as string
