@@ -1,11 +1,17 @@
-node_modules
+# VS Code
+.vscode/
 
-# Environment variables
-.env*
-!.env.example
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/.env.local
+backend/.env.*.local
 
-# Build output
-dist
+# Frontend
+frontend/node_modules/
+frontend/dist/
 
-Prisma generated client (only if you use custom output)
-# /src/generated/prisma
+# OS
+.DS_Store
+Thumbs.db

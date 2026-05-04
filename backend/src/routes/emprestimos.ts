@@ -7,7 +7,6 @@ export async function EmprestimosRoutes(app: FastifyInstance) {
         const emprestimos = await prisma.emprestimo.findMany({
             include: { leitor: true, livro: true }
         });
-        if (!emprestimos.length) return reply.status(404).send({ message: "Nenhum emprestimo encontrado!" });
         return reply.status(200).send(emprestimos);
     });
 

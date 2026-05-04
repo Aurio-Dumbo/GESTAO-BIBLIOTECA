@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biblioteca Académica | Gestão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body>
+  <section class="notice-zone global-notice-zone" id="noticeZone" aria-live="polite"></section>
+
+  <section class="auth-shell" id="authShell">
+    <div class="auth-panel">
+      <div class="auth-copy">
+        <span class="eyebrow">Sistema de biblioteca</span>
+        <h1>Biblioteca</h1>
+        <p>Inicie sessão com utilizador e PIN para gerir livros, leitores, utilizadores e empréstimos.</p>
+      </div>
+
+      <div class="auth-forms">
+        <form id="loginForm" class="stack-form auth-form">
+          <h2>Iniciar sessão</h2>
+          <label>Username<input name="username" autocomplete="username" required /></label>
+          <label>PIN<input name="pin" type="password" inputmode="numeric" minlength="6" maxlength="6" pattern="\d{6}"
+              autocomplete="current-password" required /></label>
+          <button type="submit" class="primary-button">Entrar</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="app-shell" id="appShell" hidden>
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand-block">
+        <span class="brand-mark">B</span>
+        <div>
+          <strong>Biblioteca</strong>
+          <small>Gestão da Biblioteca</small>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-section="dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+            height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <rect width="7" height="9" x="3" y="3" rx="1" />
+            <rect width="7" height="5" x="14" y="3" rx="1" />
+            <rect width="7" height="9" x="14" y="12" rx="1" />
+            <rect width="7" height="5" x="3" y="16" rx="1" />
+          </svg><span>Visão Geral</span></button>
+        <button class="nav-item" data-section="livros"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 7v14" />
+            <path d="M3 18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-5l-2-3H9L7 6H4a1 1 0 0 0-1 1z" />
+          </svg><span>Livros</span></button>
+        <button class="nav-item" data-section="leitores"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="8.5" cy="7" r="4" />
+            <path d="M20 8v6" />
+            <path d="M23 11h-6" />
+          </svg><span>Leitores</span></button>
+        <button class="nav-item" data-section="usuarios" id="usuariosNavItem"><svg xmlns="http://www.w3.org/2000/svg"
+            width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg><span>Utilizadores</span></button>
+        <button class="nav-item" data-section="emprestimos"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+            height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="m16 6 4 14" />
+            <path d="M12 6v14" />
+            <path d="M8 8v12" />
+            <path d="M4 4v16" />
+          </svg><span>Empréstimos</span></button>
+      </nav>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="page-identity">
+          <span class="eyebrow">Sistema de gestão da biblioteca</span>
+          <h1 id="pageTitle">Visão Geral</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="refreshButton" aria-label="Atualizar dados" title="Atualizar dados">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
+          </button>
+          <div class="user-block" aria-label="Utilizador atual">
+            <span id="currentUserName"></span>
+            <strong id="currentUserRole"></strong>
+          </div>
+          <button class="icon-button danger" id="logoutButton" type="button" aria-label="Logout" title="Logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m16 17 5-5-5-5" />
+              <path d="M21 12H9" />
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="content-section active" id="dashboardSection" data-view="dashboard">
+        <div class="metrics-grid" id="metricsGrid"></div>
+        <section class="surface-panel dashboard-list-panel">
+          <div class="section-heading compact-heading">
+            <span class="eyebrow">Últimos livros carregados</span>
+          </div>
+          <div id="recentBooks"></div>
+        </section>
+      </section>
+
+      <section class="content-section" id="livrosSection" data-view="livros">
+        <section class="surface-panel wide-panel">
+          <div class="toolbar">
+            <div>
+              <h3 style="margin-top: 15px;" class="toolbar-label">Catálogo de Livros</h3>
+            </div>
+            <div class="toolbar-actions">
+              <input class="search-input" id="bookSearch" placeholder="Filtrar por título, autor ou ISBN" />
+              <button class="primary-button" type="button" data-open-sheet="bookCreateSheet">Registar livro</button>
+            </div>
+          </div>
+          <div id="booksTable"></div>
+        </section>
+      </section>
+
+      <section class="content-section" id="leitoresSection" data-view="leitores">
+        <section class="surface-panel wide-panel">
+          <div class="toolbar">
+            <div>
+              <span class="eyebrow">Comunidade</span>
+              <p class="toolbar-label">Lista de leitores</p>
+            </div>
+            <div class="toolbar-actions">
+              <input class="search-input" id="readerSearch" placeholder="Filtrar por nome, email, BI/NIF ou telefone" />
+              <button class="primary-button" type="button" data-open-sheet="readerCreateSheet">Registar leitor</button>
+            </div>
+          </div>
+          <div id="readersTable"></div>
+        </section>
+      </section>
+
+      <section class="content-section" id="usuariosSection" data-view="usuarios">
+        <section class="surface-panel wide-panel">
+          <div class="toolbar">
+            <div>
+              <span class="eyebrow">Equipe</span>
+              <p class="toolbar-label">Lista de utilizadores</p>
+            </div>
+            <div class="toolbar-actions">
+              <input class="search-input" id="userSearch" placeholder="Filtrar por nome, username ou cargo" />
+              <button class="primary-button" type="button" data-open-sheet="userCreateSheet">Registar
+                utilizador</button>
+            </div>
+          </div>
+          <div id="usersTable"></div>
+        </section>
+      </section>
+
+      <section class="content-section" id="emprestimosSection" data-view="emprestimos">
+        <section class="surface-panel wide-panel">
+          <div class="toolbar">
+            <div>
+              <span class="eyebrow">Circulação</span>
+              <p class="toolbar-label">Lista de empréstimos</p>
+            </div>
+            <div class="toolbar-actions">
+              <input class="search-input" id="loanSearch" placeholder="Filtrar por leitor, livro ou estado" />
+              <button class="primary-button" type="button" data-open-sheet="loanCreateSheet">Registar
+                empréstimo</button>
+            </div>
+          </div>
+          <div id="loansTable"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="sheet-overlay" id="sheetOverlay" hidden></div>
+
+  <aside class="right-sheet" id="bookCreateSheet" aria-hidden="true" aria-labelledby="bookCreateTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Catálogo</span>
+        <h2 id="bookCreateTitle">Registar livro</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="bookCreateForm" class="stack-form">
+      <label>ISBN<input name="isbn" required placeholder="Insira o código ISBN" /></label>
+      <label>Quantidade<input name="quantidade" type="number" min="1" value="1" /></label>
+      <button type="submit" class="primary-button">Registar livro</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="bookEditSheet" aria-hidden="true" aria-labelledby="bookEditTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Catálogo</span>
+        <h2 id="bookEditTitle">Editar Livro</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="bookEditForm" class="stack-form">
+      <input name="id" type="hidden" />
+      <label>Título<input name="titulo" /></label>
+      <label>Autor<input name="autor" /></label>
+      <label>ISBN<input name="isbn" /></label>
+      <label>Ano<input name="ano" type="number" /></label>
+      <label>Editora<input name="editora" /></label>
+      <label>Categoria<input name="categoria" /></label>
+      <button type="submit" class="secondary-button">Salvar edição</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="readerCreateSheet" aria-hidden="true" aria-labelledby="readerCreateTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Comunidade</span>
+        <h2 id="readerCreateTitle">Registar leitor</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="readerCreateForm" class="stack-form">
+      <p class="form-hint">O nome será preenchido automaticamente a partir do BI/NIF indicado.</p>
+      <label>Email<input name="email" type="email" required /></label>
+      <label>Telefone<input name="telefone" /></label>
+      <label>BI/NIF<input name="nif" required placeholder="Insira o BI/NIF do leitor" /></label>
+      <label>Morada<input name="morada" /></label>
+      <button type="submit" class="primary-button">Registar leitor</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="readerEditSheet" aria-hidden="true" aria-labelledby="readerEditTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Comunidade</span>
+        <h2 id="readerEditTitle">Editar leitor</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="readerEditForm" class="stack-form">
+      <input name="id" type="hidden" />
+      <label>Nome<input name="nome" /></label>
+      <label>Email<input name="email" type="email" /></label>
+      <label>Telefone<input name="telefone" /></label>
+      <label>NIF<input name="nif" /></label>
+      <label>Morada<input name="morada" /></label>
+      <label class="checkbox-label"><input name="ativo" type="checkbox" checked /> Ativo</label>
+      <button type="submit" class="secondary-button">Guardar leitor</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="userCreateSheet" aria-hidden="true" aria-labelledby="userCreateTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Equipe</span>
+        <h2 id="userCreateTitle">Registar utilizador</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="userCreateForm" class="stack-form">
+      <label>Nome<input name="nome" required /></label>
+      <label>Username<input name="username" required /></label>
+      <label>PIN<input name="pin" type="password" inputmode="numeric" minlength="6" maxlength="6" pattern="\d{6}"
+          required /></label>
+      <label>Role<select name="role">
+          <option>BIBLIOTECARIO</option>
+          <option>ADMIN</option>
+        </select></label>
+      <button type="submit" class="primary-button">Registar utilizador</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="userEditSheet" aria-hidden="true" aria-labelledby="userEditTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Equipe</span>
+        <h2 id="userEditTitle">Editar utilizador</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="userEditForm" class="stack-form">
+      <input name="id" type="hidden" />
+      <label>Nome<input name="nome" /></label>
+      <label>Username<input name="username" /></label>
+      <label>Novo PIN<input name="pin" type="password" inputmode="numeric" minlength="6" maxlength="6"
+          pattern="\d{6}" /></label>
+      <label>Role<select name="role">
+          <option value="">Não alterar</option>
+          <option>BIBLIOTECARIO</option>
+          <option>ADMIN</option>
+        </select></label>
+      <label class="checkbox-label"><input name="ativo" type="checkbox" checked /> Ativo</label>
+      <button type="submit" class="secondary-button">Guardar utilizador</button>
+    </form>
+  </aside>
+
+  <aside class="right-sheet" id="loanCreateSheet" aria-hidden="true" aria-labelledby="loanCreateTitle">
+    <div class="sheet-header">
+      <div>
+        <span class="eyebrow">Circulação</span>
+        <h2 id="loanCreateTitle">Registar empréstimo</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-sheet aria-label="Fechar">×</button>
+    </div>
+    <form id="loanCreateForm" class="stack-form">
+      <label>Leitor
+        <select name="leitorId" id="loanReaderSelect" required>
+          <option value="">Selecione um leitor</option>
+        </select>
+      </label>
+      <label>Livro
+        <select name="livroId" id="loanBookSelect" required>
+          <option value="">Selecione um livro</option>
+        </select>
+      </label>
+      <label>Data prevista<input name="dataPrevista" type="date" required /></label>
+      <button type="submit" class="primary-button">Registar empréstimo</button>
+    </form>
+  </aside>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
+</html>

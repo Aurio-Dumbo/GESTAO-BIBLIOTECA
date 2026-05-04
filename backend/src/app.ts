@@ -13,7 +13,7 @@ import {AuthRoutes} from "./routes/auth"
 
 dotenv.config();
 
-const PORT =  Number(process.env.PORT)
+const PORT = Number(process.env.PORT || 3000)
 const app = Fastify({ logger: true });
 const ADMIN_USERNAME = "admin";
 const ADMIN_PIN = "000000";
@@ -53,22 +53,22 @@ const start = async () => {
           ativo: true,
         },
       });
-      console.log("✓ Admin criado com sucesso");
+      console.log("✓Admin criado com sucesso");
     } else {
-      // Corrige dados antigos onde o admin foi guardado com PIN sem hash.
+     
       if (!isBcryptHash(adminExists.pin)) {
         const pinHash = await bcrypt.hash(ADMIN_PIN, 10);
         await prisma.usuario.update({
           where: { id: adminExists.id },
           data: { pin: pinHash },
         });
-        console.log("✓ PIN do admin atualizado para hash");
+        console.log(" PIN do admin atualizado para hash");
       }
 
-      console.log("✓ Admin já existe");
+      console.log(" Admin já existe");
     }
 
-    await app.listen({ port:PORT });
+    await app.listen({ port: PORT, host: "0.0.0.0" });
     console.log(`Servidor a correr em ${PORT}`);
   } catch (err) {
     app.log.error(err);

@@ -164,7 +164,7 @@ export async function LivrosRoutes(app: FastifyInstance){
         })
         return livro
     })
-    app.delete("/livros:id",{preHandler: authenticate}, async (request, reply) => {
+    app.delete("/livros/:id",{preHandler: authenticate}, async (request, reply) => {
         const {id} = request.params as {id: string}
         await prisma.livro.delete({
             where: {id: Number(id)}
